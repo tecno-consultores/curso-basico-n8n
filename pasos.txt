@@ -1,0 +1,15 @@
+# bajar el instalador
+git clone https://github.com/tecno-consultores/llm-lab.git
+cd llm-lab
+
+# bajamos las imagenes que vamos a utilizar
+docker compose -f docker-compose.yml --env-file env.example --profile n8n --profile openwebui --profile evolutionapi pull
+
+# ejecutamos n8n
+docker compose -f docker-compose.yml --env-file env.example --profile n8n up -d
+
+# corregimos permisos de n8n
+chmod -Rv 777 n8n/
+
+# vemos la salud de los contenedores
+watch docker ps
