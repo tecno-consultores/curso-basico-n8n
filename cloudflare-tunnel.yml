@@ -1,0 +1,33 @@
+services:
+  tunel:
+    image: cloudflare/cloudflared:latest
+    container_name: tunel
+    hostname: tunel
+    restart: always
+    pull_policy: always
+    dns:
+      - 8.8.8.8
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    network_mode: "host"
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=el-token-va-aqui
+      - TUNNEL_TRANSPORT_PROTOCOL=auto
+      - TUNNEL_EDGE_IP_VERSION=auto
+      - TUNNEL_GRACE_PERIOD=20s
+      - TUNNEL_RETRIES=10
+      - NO_AUTOUPDATE
+      - TUNNEL_POST_QUANTUM
+    healthcheck:
+      test: ["CMD", "cloudflared", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - /etc/localtime:/etc/localtime:ro              # Synchronize time with the host
+      #- ./config/hosts:/etc/hosts                     # Mount hosts file from host to container
