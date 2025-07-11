@@ -1,4 +1,16 @@
-commit 7f252f06fe1c03346f1ad1e7b7ea72be1848fedb (HEAD -> main, origin/main)
+commit 35c9236cc1cbebf35ff2e8f82f2c07e2d67d5223 (HEAD -> main, origin/main)
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 07:59:16 2025 -0400
+
+    * rag
+
+commit 843eb067c6f41520cc92eae23d7b7452bfd92dc3
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Wed Jul 9 18:36:02 2025 -0400
+
+    * changelog
+
+commit 7f252f06fe1c03346f1ad1e7b7ea72be1848fedb
 Author: Jesus Palencia <sinfallas@gmail.com>
 Date:   Wed Jul 9 18:35:55 2025 -0400
 
