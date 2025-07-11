@@ -1,0 +1,212 @@
+{
+  "name": "Fallas",
+  "nodes": [
+    {
+      "parameters": {
+        "title": "={{ $json.execution.error.message }}",
+        "body": "={{ $json.workflow.name }}"
+      },
+      "type": "n8n-nodes-base.pushbullet",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -200
+      ],
+      "id": "64eaccaf-872c-4b02-b96e-31fe2b23c0ed",
+      "name": "Pushbullet",
+      "credentials": {
+        "pushbulletOAuth2Api": {
+          "id": "pl1XW2vXX2m84Ca3",
+          "name": "Pushbullet  sinfallas"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        -100
+      ],
+      "id": "dcb3af8f-33ad-4928-a09b-ca4f10e99175",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        40,
+        -80
+      ],
+      "id": "636a74ce-f327-4c65-9c5e-f2b5a382d8d3",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1TRCnZbRQVsoCXWvaPQ3aeCy4ed7nHAfl7rjZJN_r-Mk",
+          "mode": "list",
+          "cachedResultName": "energia",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TRCnZbRQVsoCXWvaPQ3aeCy4ed7nHAfl7rjZJN_r-Mk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 544599395,
+          "mode": "list",
+          "cachedResultName": "fallas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TRCnZbRQVsoCXWvaPQ3aeCy4ed7nHAfl7rjZJN_r-Mk/edit#gid=544599395"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "fecha": "={{ $now }}",
+            "workflow": "={{ $json.workflow.name }}",
+            "url": "={{ $json.execution.url }}",
+            "nodo": "={{ $json.execution.error.node.name }}",
+            "mensaje de error": "={{ $json.execution.error.message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nodo",
+              "displayName": "nodo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mensaje de error",
+              "displayName": "mensaje de error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -160,
+        20
+      ],
+      "id": "1c486ba8-067d-42fe-b242-e169d02e7a78",
+      "name": "LOG",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "EOD0V3CX0s4PsxJM",
+          "name": "Sheets sinfallas"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Pushbullet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LOG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pushbullet": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LOG": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1d9dfd45-08e3-4cbc-a82d-3e8793ac5e2e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "5IVU23X6PlAdPC72",
+  "tags": [
+    {
+      "createdAt": "2025-03-15T20:20:57.456Z",
+      "updatedAt": "2025-03-15T20:20:57.456Z",
+      "id": "D0ldqC0tx9BBVDvh",
+      "name": "subflow"
+    },
+    {
+      "createdAt": "2025-03-21T15:38:46.200Z",
+      "updatedAt": "2025-03-21T15:38:46.200Z",
+      "id": "COliMipKAYaAQhmo",
+      "name": "prod"
+    },
+    {
+      "createdAt": "2025-04-30T23:07:13.658Z",
+      "updatedAt": "2025-04-30T23:07:13.658Z",
+      "id": "BS3JNmJ34egYP6FT",
+      "name": "sheets"
+    }
+  ]
+}

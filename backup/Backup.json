@@ -1,0 +1,122 @@
+{
+  "name": "Backup",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "On clicking 'execute'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        0,
+        200
+      ],
+      "typeVersion": 1,
+      "id": "333eceee-89c8-47b2-9542-92919370ec24"
+    },
+    {
+      "parameters": {
+        "command": "npx n8n export:workflow --backup --output /backup/n8n_json_backup/automatic/flow/"
+      },
+      "name": "Export Workflows",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        200,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "f1f99d5d-58ca-482c-b489-4e7872219c78"
+    },
+    {
+      "parameters": {
+        "command": "npx n8n export:credentials --backup --output /backup/n8n_json_backup/automatic/pass/"
+      },
+      "name": "Export Credentials",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        360,
+        100
+      ],
+      "typeVersion": 1,
+      "id": "c07ab04b-eba3-4d18-b558-4a55aeefff23"
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 22
+            }
+          ]
+        }
+      },
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "e9fd2575-1903-48d7-8773-8cd357510d74"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Export Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export Workflows": {
+      "main": [
+        [
+          {
+            "node": "Export Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export Credentials": {
+      "main": [
+        []
+      ]
+    },
+    "On clicking 'execute'": {
+      "main": [
+        [
+          {
+            "node": "Export Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Caracas",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "5IVU23X6PlAdPC72"
+  },
+  "versionId": "30a47afd-76e0-458f-a5af-297dd61098b2",
+  "meta": {
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "Og2x8Xh1xtHgxBTQ",
+  "tags": [
+    {
+      "createdAt": "2025-03-21T15:38:46.200Z",
+      "updatedAt": "2025-03-21T15:38:46.200Z",
+      "id": "COliMipKAYaAQhmo",
+      "name": "prod"
+    }
+  ]
+}
