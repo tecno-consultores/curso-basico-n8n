@@ -1,0 +1,245 @@
+{
+  "name": "RAG_todo",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        620,
+        240
+      ],
+      "id": "3972d14a-b96d-4868-969f-49281e759446",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "xymrryv6wbWhYNOd",
+          "name": "Google Gemini(PaLM) Api account sinfallas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "loader": "pdfLoader",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        760,
+        240
+      ],
+      "id": "a54c9165-72f6-4a30-ac3f-fcc9f2780a19",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 400,
+        "chunkOverlap": 50,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        800,
+        400
+      ],
+      "id": "e3ab4262-6229-4289-a930-46ed83766f56",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8n",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "options": {
+          "clearNamespace": false,
+          "pineconeNamespace": "clase"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1,
+      "position": [
+        680,
+        20
+      ],
+      "id": "4b554c1a-0f62-4493-aa5b-db57aaaadb09",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "PJlbimpJxBvf0koA",
+          "name": "PineconeApi  sinfallas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "subir",
+        "formDescription": "archivo",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "data",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": "*.pdf",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "11c8723e-801f-491b-9de5-8b45764a3651",
+      "name": "subir",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        120,
+        20
+      ],
+      "webhookId": "5799cf33-bcd4-431a-9f4f-1cd9cfa0715f"
+    },
+    {
+      "parameters": {
+        "fileSelector": "=/data/shared/*",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        380,
+        180
+      ],
+      "id": "8c4b7144-b622-4c5f-8652-b7d215f393d3",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        120,
+        180
+      ],
+      "id": "c25805f7-b62b-4f07-b8fe-6c06063e2970",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "main": [
+        []
+      ]
+    },
+    "subir": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Caracas",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "f839a14f-24c1-44f0-8837-908428dff3ea",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "DNKtkn52xsk8apFY",
+  "tags": [
+    {
+      "createdAt": "2025-03-21T15:38:46.200Z",
+      "updatedAt": "2025-03-21T15:38:46.200Z",
+      "id": "COliMipKAYaAQhmo",
+      "name": "prod"
+    },
+    {
+      "createdAt": "2025-04-20T23:24:15.765Z",
+      "updatedAt": "2025-04-20T23:24:15.765Z",
+      "id": "MvWQ4iwzYa5dfAtX",
+      "name": "eratostenes"
+    },
+    {
+      "createdAt": "2025-03-15T19:50:19.921Z",
+      "updatedAt": "2025-03-15T19:50:19.921Z",
+      "id": "qbNiNkPu6fxuCEop",
+      "name": "sinfallas"
+    },
+    {
+      "createdAt": "2025-06-03T13:25:14.167Z",
+      "updatedAt": "2025-06-03T13:25:14.167Z",
+      "id": "fFeCFwcfqupD5tYe",
+      "name": "rag"
+    }
+  ]
+}
