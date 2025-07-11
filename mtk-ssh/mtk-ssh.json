@@ -1,0 +1,89 @@
+{
+  "name": "mtkapi",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "command"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "72d49201-e720-4a18-ba6b-25fab24d199d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "host": "10.250.1.1",
+        "port": 2222,
+        "username": "sinfallas",
+        "password": "W34r3th3b0rg1980.",
+        "command": "={{ $json.command }}",
+        "workingDirectory": ""
+      },
+      "type": "n8n-nodes-sshv2.hadidizAi",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "e6f1924e-8022-4e2a-8494-8d25d217ae17",
+      "name": "Hadidiz-AI"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Hadidiz-AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Caracas",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "5IVU23X6PlAdPC72"
+  },
+  "versionId": "0aa8e8b7-a036-4de3-9ab7-8874c9bdeac9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "wKNtK1XEneqncWHW",
+  "tags": [
+    {
+      "createdAt": "2025-03-15T19:50:19.921Z",
+      "updatedAt": "2025-03-15T19:50:19.921Z",
+      "id": "qbNiNkPu6fxuCEop",
+      "name": "sinfallas"
+    },
+    {
+      "createdAt": "2025-06-23T14:46:34.893Z",
+      "updatedAt": "2025-06-23T14:46:34.893Z",
+      "id": "N7h8ZUAYFDcETQw5",
+      "name": "ssh"
+    },
+    {
+      "createdAt": "2025-05-01T12:52:01.388Z",
+      "updatedAt": "2025-05-01T12:52:01.388Z",
+      "id": "aXxyqEiGK0qgmcwb",
+      "name": "mcp"
+    }
+  ]
+}
