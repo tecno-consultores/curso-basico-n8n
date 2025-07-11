@@ -1,4 +1,16 @@
-commit 97e9e054abbcea57bbb0caa171b71e86e19d9411 (HEAD -> main, origin/main)
+commit 4d22920b510b2f10afb4cf1e112e58a847ab319a (HEAD -> main, origin/main)
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 08:06:16 2025 -0400
+
+    * backup y fallas
+
+commit c9d06bf01ba8efd0c499d4fcb621f5e701c882b3
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 08:03:58 2025 -0400
+
+    * changelog
+
+commit 97e9e054abbcea57bbb0caa171b71e86e19d9411
 Author: Jesus Palencia <sinfallas@gmail.com>
 Date:   Fri Jul 11 08:03:52 2025 -0400
 
