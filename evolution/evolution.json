@@ -1,0 +1,232 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "evo",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        -80
+      ],
+      "id": "8df9724a-65bb-48e1-ba88-6797112f9dc5",
+      "name": "Webhook",
+      "webhookId": "51deaa26-54b2-4040-8d24-67880da91103"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=el usuario envía el siguiente mensaje:\nuser_name:{{ $json.chat_id }}\nmessage:{{ $('Webhook').item.json.body.data.message.conversation }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        680,
+        -80
+      ],
+      "id": "28f63da1-714f-412a-bd64-e585f87a3d96",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        520,
+        180
+      ],
+      "id": "f1875e3e-2943-4888-a2e8-9a4908cc7134",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gL7OJhvN5QAJ9DXa",
+          "name": "dia dos"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.chat_id }}",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        180
+      ],
+      "id": "20e62f09-9a1d-4d35-89d5-eb159dbbba8e",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $('valores').item.json.instance_name }}",
+        "remoteJid": "={{ $('valores').item.json.chat_id }}",
+        "messageText": "=IA: {{ $json.output[0].replaceAll('\"','').replaceAll('}','').replaceAll('{text:','') }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -80
+      ],
+      "id": "13787ace-abed-41ff-9a20-28bfb87552de",
+      "name": "Enviar texto",
+      "credentials": {
+        "evolutionApi": {
+          "id": "SvyhcimsexfYCKvb",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "numberOfItems": -1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserItemList",
+      "typeVersion": 1,
+      "position": [
+        900,
+        180
+      ],
+      "id": "0cd5ddcd-7e85-45a6-8606-a71e698a3422",
+      "name": "Item List Output Parser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb6064d2-3f62-41f7-bd38-04f69d197d43",
+              "name": "chat_id",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "40d41068-ef11-4543-9ec3-6d1efbb71775",
+              "name": "instance_name",
+              "value": "={{ $json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "6907ec5d-9ef5-4e36-9c4c-733e3bdc744b",
+              "name": "apikey",
+              "value": "={{ $json.body.apikey }}",
+              "type": "string"
+            },
+            {
+              "id": "ae168968-fc3e-4471-952a-591a14181d5c",
+              "name": "url_server",
+              "value": "={{ $json.body.server_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        -80
+      ],
+      "id": "37023b60-b664-46e3-bb58-e30dd94de264",
+      "name": "valores"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "valores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Enviar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item List Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "valores": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "39bdfcb7-8051-42db-a6be-506f417450e6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "be071cd9f9bdf73204392254d59cff35fedc5f45cc265253af3573e6493deb1b"
+  },
+  "id": "6fRNlkvMm5nMntUg",
+  "tags": []
+}
