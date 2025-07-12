@@ -1,0 +1,13 @@
+services:
+  db:
+    image: ankane/pgvector
+    hostname: db
+    container_name: db
+    pull_policy: always
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=vectordb
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpwd
