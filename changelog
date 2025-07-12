@@ -1,4 +1,34 @@
-commit 48516fc69b62d03d62077fad0afc2d1703285846 (HEAD -> main, origin/main, origin/HEAD)
+commit fe7f9fb2f18c994b9395fff5e5b280078fbd8b35 (HEAD -> main, origin/main, origin/HEAD)
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 16:30:49 2025 -0400
+
+    * docker
+
+commit e2c3a0325004cd891c5d75385a8dfdd41a6823a1
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 10:56:38 2025 -0400
+
+    * imagenes
+
+commit e0a055bc654e1ebd46fd6f7d424f541751d4c18a
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 10:49:50 2025 -0400
+
+    * readme
+
+commit bc9e1676ea6475191fea5515f70806d2ac34c2cf
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 10:44:59 2025 -0400
+
+    * valores
+
+commit 40fdb512cde62e959160f75b99fae6cb0f438ea3
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 10:30:26 2025 -0400
+
+    * changelog
+
+commit 48516fc69b62d03d62077fad0afc2d1703285846
 Author: Jesus Palencia <sinfallas@gmail.com>
 Date:   Sat Jul 12 10:30:20 2025 -0400
 
