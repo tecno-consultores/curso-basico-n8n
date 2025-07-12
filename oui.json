@@ -1,0 +1,150 @@
+{
+  "name": "prueba",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Webhook').item.json.body.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        -280
+      ],
+      "id": "e1becfd8-fef7-4573-8ff4-7133cce0bcee",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -20,
+        -20
+      ],
+      "id": "5259c919-0b61-4d60-9b48-ba6641fc5c63",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        -20
+      ],
+      "id": "dcfe3133-4036-4e61-aee2-dc9697881736",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "gL7OJhvN5QAJ9DXa",
+          "name": "dia dos"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6598de0f-4b08-409a-8c99-642c1b1671e7",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "body.chatInput[1].image_url.url"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        -280
+      ],
+      "id": "ebc9cedc-2067-48fd-b16d-094fd3b25f9f",
+      "name": "Webhook",
+      "webhookId": "6598de0f-4b08-409a-8c99-642c1b1671e7",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "bPU5aFXPeWNuKFxN",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        280,
+        -280
+      ],
+      "id": "14d7d2f3-d6b2-4d8f-9658-fdfa87b2e506",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8e8794b1-2727-4c59-ae5f-1391a815247f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "be071cd9f9bdf73204392254d59cff35fedc5f45cc265253af3573e6493deb1b"
+  },
+  "id": "804nRFR8lDqvKg6K",
+  "tags": []
+}
