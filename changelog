@@ -1,4 +1,40 @@
-commit e39b4aaf397ff63a23aa6c78a06b038f4224e7a5 (HEAD -> main, origin/main)
+commit fb56dc1692b7a9ba7d3420939c8920cff94d8a55 (HEAD -> main, origin/main, origin/HEAD)
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 08:42:45 2025 -0400
+
+    * bugfix
+
+commit 42f65cb3b1677aaefa04325fbdb500d01b69b9a4
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 22:19:28 2025 -0400
+
+    Update enlaces para documentacion para RAG.md
+
+commit 5dfbc0b997b3e2e000e242d3364a26e74598afa2
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 21:08:38 2025 -0400
+
+    Create pgvector.yml
+
+commit 244c4b7f5e252d897d1d5b0cd8b5b5171aab4efe
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 20:48:53 2025 -0400
+
+    Create oui.json
+
+commit d856f63984eb21d012033218a552efc8951ce65a
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 11:32:51 2025 -0400
+
+    Create cloudflare-tunnel.yml
+
+commit edfebab815d0bd963c9c77b319ef450a9e478078
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Fri Jul 11 08:34:14 2025 -0400
+
+    * changelog
+
+commit e39b4aaf397ff63a23aa6c78a06b038f4224e7a5
 Author: Jesus Palencia <sinfallas@gmail.com>
 Date:   Fri Jul 11 08:33:45 2025 -0400
 
