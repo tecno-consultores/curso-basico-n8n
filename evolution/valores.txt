@@ -1,0 +1,8 @@
+nome:
+{{ $('valores').item.json.instance_name }}
+
+numero:
+{{ $('valores').item.json.chat_id }}
+
+message:
+IA: {{ $json.output[0].replaceAll('"','').replaceAll('}','').replaceAll('{text:','') }}
