@@ -1,4 +1,16 @@
-commit 3e5c95939988c57ebb41d4141600d9f1cba75e3f (HEAD -> main, origin/main, origin/HEAD)
+commit c90f8a149451082d16a2a8103582b6c4d32e7759 (HEAD -> main, origin/main, origin/HEAD)
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sun Jul 13 14:53:13 2025 -0400
+
+    * dependencias
+
+commit 6fa3533e109cb2fe9055c7da0f7560a4391fc5cc
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Jul 12 16:38:47 2025 -0400
+
+    * changelog
+
+commit 3e5c95939988c57ebb41d4141600d9f1cba75e3f
 Author: Jesus Palencia <sinfallas@gmail.com>
 Date:   Sat Jul 12 16:38:40 2025 -0400
 
