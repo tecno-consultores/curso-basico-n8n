@@ -3,7 +3,7 @@ git clone https://github.com/tecno-consultores/llm-lab.git
 cd llm-lab
 
 # bajamos las imagenes que vamos a utilizar
-docker compose -f docker-compose.yml --env-file env.example --profile n8n --profile openwebui --profile evolutionapi pull
+docker compose -f docker-compose.yml --env-file env.example --profile n8n --profile n8n-worker --profile openwebui --profile evolutionapi pull
 
 # ejecutamos n8n
 docker compose -f docker-compose.yml --env-file env.example --profile n8n up -d
