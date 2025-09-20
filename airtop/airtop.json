@@ -1,0 +1,270 @@
+{
+  "name": "airtop",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "192f463e-3b02-4ec4-8e1a-33df4415464c"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -224
+      ],
+      "id": "45884674-8d5a-4be4-b41b-8bc98f29ed11",
+      "name": "MCP Server Trigger",
+      "webhookId": "192f463e-3b02-4ec4-8e1a-33df4415464c"
+    },
+    {
+      "parameters": {
+        "resource": "interaction",
+        "operation": "type",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', \"The `sessionId` returned by the `Start_Browser` tool\", 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', \"The `windowId` returned by the `Start_Browser` tool\", 'string') }}",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "pressEnterKey": true,
+        "elementDescription": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Element_Description', `Search bars usually contain a placeholder that says \"search\"`, 'string') }}",
+        "additionalFields": {}
+      },
+      "id": "f857d6dc-782f-4cee-ba0a-75c81bb550b8",
+      "name": "airtop_Type",
+      "type": "n8n-nodes-base.airtopTool",
+      "position": [
+        256,
+        256
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "extraction",
+        "operation": "query",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', \"The `sessionId` returned by the `Start_Browser` tool\", 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', \"The `windowId` returned by the `Start_Browser` tool\", 'string') }}",
+        "prompt": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "id": "ebc9d98a-226b-42bd-85e1-3c1a3a6bad98",
+      "name": "airtop_Query",
+      "type": "n8n-nodes-base.airtopTool",
+      "position": [
+        96,
+        256
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "window",
+        "operation": "load",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', \"The `sessionId` returned by the `Start_Browser` tool\", 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', \"The `windowId` returned by the `Start_Browser` tool\", 'string') }}",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "id": "23c7cb9c-c4b1-4436-b422-c403138bb73e",
+      "name": "airtop_Load_URL",
+      "type": "n8n-nodes-base.airtopTool",
+      "position": [
+        -80,
+        256
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "terminate",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', \"The `sessionId` returned by the `Start_Browser` tool\", 'string') }}"
+      },
+      "id": "f0faf74d-efc7-4df2-a007-c357e5f315eb",
+      "name": "airtop_End_Session",
+      "type": "n8n-nodes-base.airtopTool",
+      "position": [
+        576,
+        256
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "interaction",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', \"The `sessionId` returned by the `Start_Browser` tool\", 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', \"The `windowId` returned by the `Start_Browser` tool\", 'string') }}",
+        "elementDescription": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Element_Description', `Describe in detail the element to click on, e.g. The menu item \"about us\" at the top of the page`, 'string') }}",
+        "additionalFields": {
+          "waitForNavigation": "domcontentloaded"
+        }
+      },
+      "id": "7ef7045e-c6bd-4541-873b-fd2122f153cb",
+      "name": "airtop_ClickTool",
+      "type": "n8n-nodes-base.airtopTool",
+      "position": [
+        416,
+        256
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Start_Browser",
+        "description": "Start a new browser session and window\n\nIt is recommended to use the complementary_information tool to see if the website you should visit is listed there and you can obtain its url.",
+        "workflowId": {
+          "__rl": true,
+          "value": "FF8oDdgcR3NlGg9Q",
+          "mode": "list",
+          "cachedResultName": "airtop"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', ``, 'string') }}",
+            "profile_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('profile_name', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "profile_name",
+              "displayName": "profile_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "ad654c16-19ab-4343-bfc4-627dca88f1f6",
+      "name": "airtop_Start_Browser",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -240,
+        256
+      ],
+      "typeVersion": 2.1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "airtop_Start_Browser": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "airtop_Load_URL": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "airtop_Query": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "airtop_Type": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "airtop_ClickTool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "airtop_End_Session": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fb7620e0-d29c-4b6f-9c25-3515d76bd211",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "T0TqA8TzMMHOZAvE",
+  "tags": []
+}

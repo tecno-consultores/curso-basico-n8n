@@ -1,0 +1,185 @@
+{
+  "name": "airtop_login",
+  "nodes": [
+    {
+      "parameters": {
+        "profileName": "={{ $json.profile_name.replaceAll(/\\s/g, '').replaceAll('_', '') }}",
+        "additionalFields": {}
+      },
+      "id": "eb66f326-c782-42d4-add9-2b10d91d5a1d",
+      "name": "Session",
+      "type": "n8n-nodes-base.airtop",
+      "position": [
+        192,
+        0
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "window",
+        "url": "={{ $('When Executed by Another Workflow').item.json.url }}",
+        "getLiveView": true,
+        "additionalFields": {}
+      },
+      "id": "c663a05b-3a49-492b-aac3-501538dbf854",
+      "name": "Window",
+      "type": "n8n-nodes-base.airtop",
+      "position": [
+        368,
+        0
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "airtopApi": {
+          "id": "3AytisDkbfSzpaj3",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0a0680af-39bd-4bc7-b9cd-84c1766c79a1",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Session').item.json.sessionId }}"
+            },
+            {
+              "id": "13940ee8-c1d4-4718-a7b4-176c44c097b7",
+              "name": "windowId",
+              "type": "string",
+              "value": "={{ $('Window').item.json.data.windowId }}"
+            },
+            {
+              "id": "a0f2005c-2cd2-4a8d-891b-a4759b72a124",
+              "name": "output",
+              "type": "string",
+              "value": "Session and window created successfully"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d81a6571-31ec-415d-8ca9-ab3559b55c63",
+      "name": "Return IDs",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        816,
+        0
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "url"
+            },
+            {
+              "name": "profile_name"
+            }
+          ]
+        }
+      },
+      "id": "77b21232-f51f-43f3-9a8d-65119050df35",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c88c688d-a0ee-4021-a3a3-9447ab39af1b",
+              "name": "url",
+              "value": "={{ $json.data.liveViewUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        0
+      ],
+      "id": "e1105032-215c-477e-b2f9-af89d84da83d",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Session": {
+      "main": [
+        [
+          {
+            "node": "Window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Return IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "162dbcc0-3742-48c3-8c33-a4d92db15e67",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "FF8oDdgcR3NlGg9Q",
+  "tags": []
+}
