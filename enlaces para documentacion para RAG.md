@@ -9,6 +9,6 @@ git clone https://github.com/n8n-io/n8n-docs.git
 
 cd n8n-docs
 
-"find . -name "*.md" -exec cat {} \; > ../n8n_docs_combined.md"
+find . -name "*.md" -exec cat {} \\; > ../n8n_docs_combined.md
 
 convertir n8n_docs_combined.md a PDF
