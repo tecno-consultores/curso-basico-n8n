@@ -1,5 +1,5 @@
 {
-  "name": "whatsapp",
+  "name": "My workflow 6",
   "nodes": [
     {
       "parameters": {
@@ -10,50 +10,12 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -220,
-        -40
+        48,
+        16
       ],
-      "id": "08471489-50de-4fc5-9015-01151a8f1790",
+      "id": "995a0ea3-19c1-4db9-8869-e23bf333b8d8",
       "name": "Webhook",
       "webhookId": "51deaa26-54b2-4040-8d24-67880da91103"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=el usuario envía el siguiente mensaje:\nuser_name:{{ $json.chat_id }}\nmessage:{{ $('Webhook').item.json.body.data.message.conversation }}",
-        "hasOutputParser": true,
-        "options": {
-          "systemMessage": "You are a helpful assistant"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2,
-      "position": [
-        220,
-        -40
-      ],
-      "id": "50faefc3-b667-4d64-924f-f459cfe9d562",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        60,
-        220
-      ],
-      "id": "facf5e77-6c82-4794-9dee-7b610808fa95",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "xymrryv6wbWhYNOd",
-          "name": "Google Gemini(PaLM) Api account sinfallas"
-        }
-      }
     },
     {
       "parameters": {
@@ -64,49 +26,34 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        240,
-        220
+        560,
+        352
       ],
-      "id": "7259028f-9f28-4714-9ef7-061acd16779c",
+      "id": "99ce2b55-acab-4759-90f0-a2cb7f30ad6f",
       "name": "Simple Memory"
     },
     {
       "parameters": {
         "resource": "messages-api",
-        "instanceName": "={{ $('valores').item.json.instance_name }}",
+        "instanceName": "prueba",
         "remoteJid": "={{ $('valores').item.json.chat_id }}",
-        "messageText": "=IA: {{ $json.output[0].replaceAll('\"','').replaceAll('}','').replaceAll('{text:','') }}",
+        "messageText": "={{ $json.output.replace(/\"/g, \"\").replace(/text/g, \"\").replace(/\\\\/g, \"\").replace(/:/g, \"\").replace(/{/g, \"\").replace(/]/g, \"\").replace(/}/g, \"\").replace(/\\[/g, \"\") }}",
         "options_message": {}
       },
       "type": "n8n-nodes-evolution-api.evolutionApi",
       "typeVersion": 1,
       "position": [
-        680,
-        -40
+        784,
+        16
       ],
-      "id": "83d31859-6c28-4a09-ba13-60155a5c1b05",
+      "id": "4b93b334-baa6-44a2-b33e-c7b6a4ea2e24",
       "name": "Enviar texto",
       "credentials": {
         "evolutionApi": {
-          "id": "Tqc0fpt7oFR01S6Y",
+          "id": "NPtlstymXnUyhUSv",
           "name": "Evolution account"
         }
       }
-    },
-    {
-      "parameters": {
-        "options": {
-          "numberOfItems": -1
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.outputParserItemList",
-      "typeVersion": 1,
-      "position": [
-        420,
-        220
-      ],
-      "id": "826e27bd-b4d1-480e-803f-424bd2134cb6",
-      "name": "Item List Output Parser"
     },
     {
       "parameters": {
@@ -143,14 +90,154 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        0,
-        -40
+        240,
+        16
       ],
-      "id": "c9c6a145-a930-47a2-8f63-89904ac72553",
+      "id": "538f823f-c94e-4dc4-9920-fea7b8bd61ed",
       "name": "valores"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=el usuario envía el siguiente mensaje:\nuser_name:{{ $json.chat_id }}\nmessage:{{ $('Webhook').item.json.body.data.message.conversation }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "You are a customer service assistant for an ISP. \n\nYour role will be to receive and classify user requests to deliver them to the technical support staff.",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        16
+      ],
+      "id": "714e96f8-796e-404c-a198-654d446b12b4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        304,
+        352
+      ],
+      "id": "cd983ab8-f112-4a0f-9114-d4dbf176081d",
+      "name": "2.5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KurajzM8pZUq634r",
+          "name": "Google Gemini profesor"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        432,
+        352
+      ],
+      "id": "10d07043-b382-4bfc-99c0-cc413ce23bb3",
+      "name": "2.0",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KurajzM8pZUq634r",
+          "name": "Google Gemini profesor"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n6.sinfallas.org",
+            "user-agent": "axios/1.7.9",
+            "content-length": "1026",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-cert-presented": "false",
+            "cf-cert-revoked": "false",
+            "cf-cert-verified": "false",
+            "cf-connecting-ip": "190.120.253.49",
+            "cf-ipcity": "Guacara",
+            "cf-ipcontinent": "SA",
+            "cf-ipcountry": "VE",
+            "cf-iplatitude": "10.22609",
+            "cf-iplongitude": "-67.87700",
+            "cf-metro-code": "0",
+            "cf-ray": "98255d97cd71323d-MIA",
+            "cf-region": "Carabobo",
+            "cf-region-code": "G",
+            "cf-timezone": "America/Caracas",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "cfddabb1-f86b-4392-91ee-7abbc56fa988",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "x-forwarded-for": "190.120.253.49",
+            "x-forwarded-host": "n8n6.sinfallas.org",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "prueba",
+            "data": {
+              "key": {
+                "remoteJid": "584124888508@s.whatsapp.net",
+                "fromMe": false,
+                "id": "A5E754AC377FCF897C9CCB07C2793EB3"
+              },
+              "pushName": "Tecno Consultores 2023",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "messageContextInfo": {
+                  "deviceListMetadata": {
+                    "senderTimestamp": "1758145324",
+                    "recipientKeyHash": "px6JNkfDIB/MbA==",
+                    "recipientTimestamp": "1758411887"
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": "+b5/bi3iY3EOWU/JYmZoHMZcQunU9LsqmIJUgaXXoOg="
+                },
+                "conversation": "Hola"
+              },
+              "contextInfo": {
+                "expiration": 86400,
+                "ephemeralSettingTimestamp": "1723298",
+                "disappearingMode": {
+                  "initiator": "INITIATED_BY_OTHER",
+                  "trigger": "ACCOUNT_SETTING",
+                  "initiatedByMe": false
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1758413699,
+              "instanceId": "3c4e5c64-0837-4661-932d-0cf657b721b8",
+              "source": "android"
+            },
+            "destination": "https://n8n6.sinfallas.org/webhook/evo",
+            "date_time": "2025-09-20T21:14:59.590Z",
+            "sender": "584144704882@s.whatsapp.net",
+            "server_url": "https://evo6.sinfallas.org",
+            "apikey": "CF76FCB3AB76-4C00-A19E-92EB9EB98354"
+          },
+          "webhookUrl": "https://n8n6.sinfallas.org/webhook/evo",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
   "connections": {
     "Webhook": {
       "main": [
@@ -158,17 +245,6 @@
           {
             "node": "valores",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -185,33 +261,44 @@
         ]
       ]
     },
-    "AI Agent": {
+    "valores": {
       "main": [
         [
           {
-            "node": "Enviar texto",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Item List Output Parser": {
-      "ai_outputParser": [
+    "2.5": {
+      "ai_languageModel": [
         [
           {
             "node": "AI Agent",
-            "type": "ai_outputParser",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "valores": {
-      "main": [
+    "2.0": {
+      "ai_languageModel": [
         [
           {
             "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Enviar texto",
             "type": "main",
             "index": 0
           }
@@ -223,11 +310,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "640a1cde-b71e-479e-89ca-0938d3054882",
+  "versionId": "a83a7724-4f71-429a-83cd-5ae3671d5689",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
   },
-  "id": "uILVYHHkeC2KzFnZ",
+  "id": "Bsrqvulaxih72dPA",
   "tags": []
 }
