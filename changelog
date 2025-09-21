@@ -1,4 +1,46 @@
-commit c90f8a149451082d16a2a8103582b6c4d32e7759 (HEAD -> main, origin/main, origin/HEAD)
+commit 44391d4fe5e6dde6c71fbedbc3682a950d050088 (HEAD -> main, origin/main, origin/HEAD)
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sat Sep 20 20:28:59 2025 -0400
+
+    * bugfix
+
+commit 506669d244ef603a9aff8567482675eb6dbe0ecc
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Fri Sep 19 21:48:24 2025 -0400
+
+    Update enlaces para documentacion para RAG.md
+
+commit 1a7c2eab7eec1d4dafd4476b941b580a1f70e7e6
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Fri Sep 19 21:48:05 2025 -0400
+
+    Update enlaces para documentacion para RAG.md
+
+commit 178b8a74543bcab20227a7312fb5c10c84a33208
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Fri Sep 19 20:45:15 2025 -0400
+
+    * system message de airtop
+
+commit dc56d2673e495ae319bf5e6f85ae4cada223b044
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Fri Sep 19 20:38:04 2025 -0400
+
+    * airtop
+
+commit 9d43a5b0944e4b3130c72843f8dd426fe1724ddc
+Author: Jesús Palencia <sinfallas@gmail.com>
+Date:   Sat Sep 13 10:56:07 2025 -0400
+
+    Update pasos.txt
+
+commit c1ffebfb5576e514b086d58683795046f4914524
+Author: Jesus Palencia <sinfallas@gmail.com>
+Date:   Sun Jul 13 14:53:23 2025 -0400
+
+    * changelog
+
+commit c90f8a149451082d16a2a8103582b6c4d32e7759
 Author: Jesus Palencia <sinfallas@gmail.com>
 Date:   Sun Jul 13 14:53:13 2025 -0400
 
