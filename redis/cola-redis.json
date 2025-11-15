@@ -1,0 +1,234 @@
+{
+  "name": "cola-redis",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "5bc57e9d-8aa1-4523-99c0-65fa507e5319",
+      "name": "No operation",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $json.memory.id }}",
+        "messageData": "={{ JSON.stringify(\n{\n 'mensaje': $json.body.chatInput,\n 'sessionId': $json.memory.id,\n 'date_time': $json.cuando\n}\n) }}",
+        "tail": true
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        192
+      ],
+      "id": "0eee43e6-9c59-4e1c-ba57-5d107f8f30af",
+      "name": "Buffer",
+      "credentials": {
+        "redis": {
+          "id": "Gb09rxPoyOe4DEfu",
+          "name": "Redis colas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 7
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        336
+      ],
+      "id": "02e91034-46a4-4f29-9897-63053e93de79",
+      "name": "Wait",
+      "webhookId": "2ec4d033-6513-4abe-9a58-49b2255dd24d"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "message",
+        "key": "={{ $('Buffer').item.json.memory.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        192
+      ],
+      "id": "54402b1c-69b9-494a-bb5d-690a154cdb87",
+      "name": "Obtener_buffer",
+      "credentials": {
+        "redis": {
+          "id": "Gb09rxPoyOe4DEfu",
+          "name": "Redis colas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Buffer').item.json.memory.id }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        0,
+        160
+      ],
+      "id": "e9537322-50bb-43d9-a6d6-376d3aea061f",
+      "name": "Limpiar_buffer",
+      "credentials": {
+        "redis": {
+          "id": "Gb09rxPoyOe4DEfu",
+          "name": "Redis colas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "037eb7b8-af56-4a3f-9d94-81aa83d34219",
+                    "leftValue": "={{ $json.message.last().parseJson().date_time.replaceAll('\"','') }}",
+                    "rightValue": "={{ $now.minus(7,'seconds') }}",
+                    "operator": {
+                      "type": "dateTime",
+                      "operation": "before"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "continuar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ JSON.parse($json.message.last()).sessionId }}",
+                    "rightValue": "={{ $('Buffer').item.json.memory.id }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "93f592b8-ff59-4773-a1be-30dbdae30989"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ignorar"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "ignoreCase": false,
+          "renameFallbackOutput": "esperar"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -208,
+        176
+      ],
+      "id": "f02f5189-f2f7-454c-ab5e-a66ad1e18415",
+      "name": "Switch cola"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Buffer": {
+      "main": [
+        [
+          {
+            "node": "Obtener_buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Obtener_buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener_buffer": {
+      "main": [
+        [
+          {
+            "node": "Switch cola",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch cola": {
+      "main": [
+        [
+          {
+            "node": "Limpiar_buffer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No operation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cd6723ab-322d-4618-8e48-4498803dc9be",
+  "meta": {
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "i9qmGu76GWJ1yPog",
+  "tags": []
+}
