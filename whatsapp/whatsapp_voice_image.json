@@ -1,0 +1,860 @@
+{
+  "name": "whatsapp_voice_image",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "evo",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        320
+      ],
+      "id": "8a81d8e5-591d-4eee-8bed-b9d80de91605",
+      "name": "Webhook",
+      "webhookId": "51deaa26-54b2-4040-8d24-67880da91103"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        432
+      ],
+      "id": "cb9025d8-665a-40f8-be1f-5153f5131624",
+      "name": "Enviar texto",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb6064d2-3f62-41f7-bd38-04f69d197d43",
+              "name": "chat_id",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "40d41068-ef11-4543-9ec3-6d1efbb71775",
+              "name": "instance_name",
+              "value": "={{ $json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "6907ec5d-9ef5-4e36-9c4c-733e3bdc744b",
+              "name": "apikey",
+              "value": "={{ $json.body.apikey }}",
+              "type": "string"
+            },
+            {
+              "id": "ae168968-fc3e-4471-952a-591a14181d5c",
+              "name": "url_server",
+              "value": "={{ $json.body.server_url }}",
+              "type": "string"
+            },
+            {
+              "id": "8d3aa61b-5f86-489f-be69-572dafaffbad",
+              "name": "message",
+              "value": "={{ $('Webhook').item.json.body.data.message.conversation || $('Webhook').item.json.body.data.message.imageMessage.caption  }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        336
+      ],
+      "id": "28690817-5856-4c1f-97d0-03288e7072ac",
+      "name": "valores"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=imagen: falso\naudio: verdadero\nvalores: falso\n\n* Si \"imagen\" es verdadero: entonces debes devolver al usuario lo siguiente:\n  - Fecha: {{ $json.output['Fecha:'] }}\n  - Operacion: {{ $json.output['Operación:'] }}\n  - Identificacion: {{ $json.output['Identificación:'] }}\n  - Origen: {{ $json.output['Origen:'] }}\n  - Destino: {{ $json.output['Destino:'] }}\n  - Banco: {{ $json.output['Banco:'] }}\n  - Monto: {{ $json.output['Monto:'] }}\n  - instruccion: {{ $json.mensaje-img }}\n  - mensaje del usuario: {{ $json.message-img }}\n\n* Si \"audio\" es verdadero: continua la charla con el usuario\n\n* Si \"valores\" es verdadero: significa que no haz recibido ninguna componente multimedia de parte del usuario y solo debes atender su requirmiento",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=You are a customer service assistant for an ISP. \n\nYour role will be to receive and classify user requests to deliver them to the technical support staff.\n\nWhen you receive the information of a payment made by the user, you must store it using the banco tool",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        336
+      ],
+      "id": "80119b85-866c-4ae4-b03d-3be44d7f8609",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        624,
+        896
+      ],
+      "id": "2e2806b7-91c0-4bf2-9acc-3eaaa2ac7a69",
+      "name": "2.5"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        736,
+        880
+      ],
+      "id": "9114f7d4-7a4c-494c-b298-0ece440c9d7c",
+      "name": "2.0"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.chat_id }}",
+        "sessionTTL": 3600,
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        880,
+        880
+      ],
+      "id": "607b957e-0304-49c4-9e2d-6b870a574af3",
+      "name": "Redis Chat Memory"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/tmp/foto.jpg",
+        "dataPropertyName": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "f9a031ab-bda0-4973-ab33-b752977c5ed1",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "body.data.message.base64",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "de06b72b-5c52-4ed7-b138-1d5eb02e22d3",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "describe la imagen en español, dame la mayor cantidad de detalles posibles. en caso de que haya texto en la imagen coloca ese texto sin cambios en tu respuesta.",
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "67ae669b-8500-4b12-8520-7f1fa8eab063",
+      "name": "Analyze an image"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.content.parts[0].text }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Fecha:",
+              "description": "un campo de fecha en formato dia/mes/ano, ejemplo: 15/02/2026",
+              "required": true
+            },
+            {
+              "name": "Operación:",
+              "description": "un campo de un identificador numerico, por ejemplo: 000023467467",
+              "required": true
+            },
+            {
+              "name": "Identificación:",
+              "description": "un campo numerico de 8 digitos, por ejemplo: 12345678",
+              "required": true
+            },
+            {
+              "name": "Origen:",
+              "description": "esta es un campo mixto solo debes traer los primeros 4 caracteres de la cadena, por ejemplo: 0102****2488, debes traer 0102",
+              "required": true
+            },
+            {
+              "name": "Monto:",
+              "description": "este es un campo de formato de moneda que puede empezar o terminar con la cadena de texto: Bs, debes traer el monto asociado",
+              "required": true
+            },
+            {
+              "name": "Destino:",
+              "description": "este es un campo numerico que corresponde a un nuemro de telefono de 11 digitos, por ejemplo: 04123557345",
+              "required": true
+            },
+            {
+              "name": "Banco:",
+              "description": "es una cadena de texto que te entrega el nombre del banco, por ejemplo: 0104 - BANCO VENEZOLANO DE CREDITO",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "58ea58ca-b382-4624-a8cf-4242ce685586",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.data.message.imageMessage.mimetype }}",
+                    "rightValue": "image/jpeg",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "900d8bdc-3d34-4576-a49d-7e88b82054c9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "imagen"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "28fe0977-fc06-4d79-a0b9-c20c3b16d515",
+                    "leftValue": "={{ $json.body.data.message.audioMessage.mimetype }}",
+                    "rightValue": "audio/ogg; codecs=opus",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d4287744-988a-402b-8ecb-e562c5081818",
+                    "leftValue": "=",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        304
+      ],
+      "id": "15870596-05d7-4ac0-940c-b8fb3c26df6d",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        656
+      ],
+      "id": "a504947f-41ec-48e9-a4ab-6bedd587eec5",
+      "name": "Transcribe a recording"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "body.data.message.base64",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        656
+      ],
+      "id": "60479883-cb17-43ce-b5db-1ee4d44c44d8",
+      "name": "Convert to File1"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/tmp/audio.ogg",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        656
+      ],
+      "id": "11122103-736c-42df-875d-72eecb8dacf4",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a8e2621e-881e-4a5f-98a4-57e676e8dcf3",
+              "name": "mensaje-img",
+              "value": "el siguiente texto corresponde a la información bancaria de un pago realizado por el usuario, solo debes responder OK y devolver al usuario la siguiente informacion bancaria:\nFecha, Operacion, Identificacion, Origen, Destino, Banco y Monto",
+              "type": "string"
+            },
+            {
+              "id": "9087d409-e95a-429f-99b9-689216a73638",
+              "name": "message-img",
+              "value": "={{ $('Webhook').item.json.body.data.message.conversation || $('Webhook').item.json.body.data.message.imageMessage.caption  }}",
+              "type": "string"
+            },
+            {
+              "id": "010987c6-6874-4b86-8092-38d8048926f4",
+              "name": "chat_id",
+              "value": "={{ $('Webhook').item.json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "393fa916-de9f-4218-af35-709a26e4b3a6",
+              "name": "output['Fecha:']",
+              "value": "={{ $json.output['Fecha:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "745bc47b-eced-447c-9628-ad221b714f40",
+              "name": "output['Operación:']",
+              "value": "={{ $json.output['Operación:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "83c24381-ebd2-4736-b340-66b1a51d4be3",
+              "name": "output['Identificación:']",
+              "value": "={{ $json.output['Identificación:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a7673407-ee7e-42f3-aa07-37bf30eb43de",
+              "name": "output['Origen:']",
+              "value": "={{ $json.output['Origen:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "124da451-fa2e-4248-9d3d-e914876b83e4",
+              "name": "output['Origen:']",
+              "value": "={{ $json.output['Origen:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d30b39a7-84c1-4a51-a193-c17c920afae1",
+              "name": "output['Destino:']",
+              "value": "={{ $json.output['Destino:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "c0911e24-5dee-4340-84ab-1b6c221e5a02",
+              "name": "output['Banco:']",
+              "value": "={{ $json.output['Banco:'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ca256a7b-7d53-411f-97fe-0daeeaa25dcb",
+              "name": "output['Monto:']",
+              "value": "={{ $json.output['Monto:'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1232,
+        0
+      ],
+      "id": "5d933020-c213-4655-9faa-a64ae6d2ec51",
+      "name": "imagen"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "74a39afc-b9f6-457d-9023-02cab2c6d51c",
+              "name": "transcripcion",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "d01fca5e-367c-4139-b15f-baae9fecb627",
+              "name": "chat_id",
+              "value": "={{ $('Webhook').item.json.body.data.key.remoteJid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        656
+      ],
+      "id": "7775b227-9979-453b-9a03-9cdc4596f47b",
+      "name": "audio"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": true,
+                    "rightValue": "audio/ogg; codecs=opus",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "46e2fdb4-dd12-48a8-8b7e-1fa21d97509a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9761192c-e2d0-433d-8db6-5b2a27a12d77",
+                    "leftValue": "SFghz",
+                    "rightValue": "SFghz",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        336
+      ],
+      "id": "2ba042b0-e006-4769-8ea6-52254c26b0f1",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        240
+      ],
+      "id": "e3cdeca8-2c7d-49a8-9b59-1df8a1a8918a",
+      "name": "Generate speech from text",
+      "credentials": {}
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1904,
+        240
+      ],
+      "id": "21bce324-2730-41d9-a254-96eb6f8cedc5",
+      "name": "Enviar audio",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        240
+      ],
+      "id": "3676d0b8-bc6b-4d20-97f6-a0e454eb2305",
+      "name": "Extract from File"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "valores": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2.5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2.0": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "valores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "imagen": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "audio": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Generate speech from text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate speech from text": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Enviar audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "033e7270-7ed9-4d20-85df-459035ef1315",
+  "meta": {
+    "instanceId": "5d7cd8c0612c3c9f6b1aaad343a794c642582938ff7ecf165a06281225de139b"
+  },
+  "id": "iy1cjey-lWJi1azzTLaFy",
+  "tags": []
+}
